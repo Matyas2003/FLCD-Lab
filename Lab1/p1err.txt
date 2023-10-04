@@ -1,0 +1,12 @@
+a, b, c, 1min -> integer //identifier cannot start with a number
+in (a)
+in (b)
+in (c) 
+1min = a 
+if (1min > b){
+1min = b
+}
+if (1min > c){
+1min = c
+}
+out (1min)$ //illegal character $ appears at the end of the statement
