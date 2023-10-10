@@ -1,0 +1,9 @@
+Alphabet:
+
+- operators = + - * / < <= == >= > ^ -> 
+
+- separators ( ) [ ] { } space newline , " '
+
+- reserved words:
+
+    and bool character constant do else float for if integer in or out read string sqrt then while write  

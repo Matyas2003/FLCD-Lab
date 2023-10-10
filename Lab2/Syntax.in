@@ -1,0 +1,53 @@
+The words - predefined tokens are specified between " and "
+Each new line means a new command (the new line is a separator)
+
+
+Sintactical rules:
+
+program ::= decllist stmtlist 
+
+decllist ::= declaration | declaration "newline" decllist
+
+declaration ::= identifierlist -> type1
+
+identifierlist ::= identifier | identifier, identifierlist
+
+identifier ::= letter | letter digit | letter identifier
+
+letter ::= "a" | "b" | ... | "z" | "A" | "B" | . ..| "Z"
+
+digit ::= "0" | "1" |...| "9"
+
+type1 ::= "bool" | "string" | "character" | "integer" | "float"
+
+arraylist ::= identifier "[" nr "]" | identifier "[" nr "]", arraylist
+
+arraydecl ::= arraylist -> type1
+
+type  ::= type1|arraydecl
+
+stmtlist ::= stmt | stmt "newline" stmtlist
+
+stmt ::= simplstmt | structstmt
+
+simplstmt ::= assignstmt | iostmt
+
+assignstmt ::= identifier "=" expression
+
+expression ::= expression "+" term | expression "-" term | expression "*" term | expression "/" term | term
+
+term ::= "(" expression ")" | identifier
+
+iostmt ::= "in" | "out" "(" identifier ")"
+
+structstmt ::= forstmt | ifstmt | whilestmt
+
+ifstmt ::= "if" "(" condition ")" "{" stmt "}" [ "else" "{" stmt "}"]
+
+whilestmt ::= "while" "(" condition ")" "{" stmt "}"
+
+forstmt ::= "for" "(" assignstmt, condition, expression ")" "{" stmt "}"
+
+condition ::= expression RELATION expression
+
+RELATION ::= "<" | "<=" | "==" | "<>" | ">=" | ">"
