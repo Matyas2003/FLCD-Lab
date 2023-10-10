@@ -1,27 +1,17 @@
-1.integer
+1.integer - rule:
 
       noconst:="+"no|"-"no|no
 
       no:=digit{no}
-	  
-2.float
 
-	  float:=no"."no
-	  
-	  no:=digit{no}
-
-3.character
+2.character
 
     character:='letter'|'digit'
 
-4.string
+3.string
 
       constchar:="string"
 
       string:=char{string}
 
       char:=letter|digit
-	  
-5.bool
-
-	  bool:=0|1
