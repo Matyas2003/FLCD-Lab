@@ -1,0 +1,22 @@
+Symbol Table:
+Identifier           | Hash      
+--------------------------------
+a                    | 3         
+b                    | 4         
+c                    | 5         
+delta                | 5         
+sol1                 | 7         
+sol2                 | 8         
+
+
+String Constant      | Hash      
+--------------------------------
+"no real solution"   | 21        
+"type a, b, and c, where the equation is ax^2 + bx + c = 0" | 42        
+
+
+Int Constant         | Hash      
+--------------------------------
+0                    | 0         
+2                    | 2         
+-4                   | 43        

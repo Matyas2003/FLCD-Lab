@@ -1,0 +1,15 @@
+Symbol Table:
+Identifier           | Hash      
+--------------------------------
+a                    | 3         
+b                    | 4         
+c                    | 5         
+min                  | 42        
+
+
+String Constant      | Hash      
+--------------------------------
+
+
+Int Constant         | Hash      
+--------------------------------

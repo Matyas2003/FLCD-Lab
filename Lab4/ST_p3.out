@@ -1,0 +1,17 @@
+Symbol Table:
+Identifier           | Hash      
+--------------------------------
+i                    | 11        
+sum                  | 12        
+n                    | 16        
+buf                  | 35        
+
+
+String Constant      | Hash      
+--------------------------------
+
+
+Int Constant         | Hash      
+--------------------------------
+0                    | 0         
+1                    | 1         
