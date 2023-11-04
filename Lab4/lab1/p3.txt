@@ -1,0 +1,12 @@
+n -> integer
+i -> integer
+sum -> integer
+buf -> integer
+sum = 0
+
+in (n)
+for (i = 0, i < n, i = i+1){
+in (buf)
+sum = sum+buf
+}
+out(sum)

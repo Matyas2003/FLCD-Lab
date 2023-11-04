@@ -1,0 +1,12 @@
+a, b, c, min -> integer
+in (a)
+in (b)
+in (c)
+min = a
+if (min > b){
+min = b
+}
+if (min > c){
+min = c
+}
+out (min)

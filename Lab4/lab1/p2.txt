@@ -1,0 +1,22 @@
+a, b, c -> integer
+delta -> integer
+sol1, sol2 -> float
+
+out("type a, b, and c, where the equation is ax^2 + bx + c = 0")
+in (a)
+in (b)
+in (c)
+
+delta = b^2-4*a*c
+if (delta < 0){
+out("no real solution")
+}
+if (delta == 0){
+sol1 = (-b+sqrt(delta))/(2*a)
+out (sol1)
+}
+if (delta > 0){
+sol1 = (-b+sqrt(delta))/(2*a)
+sol2 = (-b-sqrt(delta))/(2*a)
+out (sol1, sol2)
+}
