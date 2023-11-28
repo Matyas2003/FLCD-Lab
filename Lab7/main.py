@@ -262,7 +262,7 @@ def write_table_to_file(table):
     file_name = "out1.txt"
     f = open(file_name, "w")
     for i in range(len(table)):
-        f.write(str(i) + " : " + table[i].__str__() + "\n")
+        f.write(str(i+1) + " : " + table[i].__str__() + "\n")
 
 
 def build_string_of_production(prod):
