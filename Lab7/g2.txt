@@ -1,0 +1,27 @@
+letter zero_digit digit type relation identifier declaration list_declaration input output return_stmt const_int const_char const_string const_bool assignment if_stmt condition stmt loop function function_code params program
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9 int char string boolean < > <= >= == <> list [ ] ; read write return + - true false = check : otherwise go from to ( ) ,
+program
+letter->A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z
+zero_digit->1|2|3|4|5|6|7|8|9
+digit->0|zero_digit
+type->int|char|string|boolean
+relation-><|>|<=|>=|==|<>
+identifier->letter|letter identifier|identifier digit|_identifier|identifier_
+declaration->type identifier;
+list_declaration->list[type] identifier;
+input->read identifier;
+output->write identifier;
+return_stmt->return identifier;|return const_int;|return const_char;|return const_string;
+const_int->digit|+zerodigit const_int|-zerodigit const_int|digit const_int
+const_char->letter|digit
+const_string->char char|char const_string
+const_bool->true|false
+assignment->identifier = identifier;|identifier = const_int;|identifier = const_char;|identifier = const_string;
+if_stmt->check condition: stmt; otherwise: stmt;
+condition->identifier relation identifier
+stmt->assigment|input|output|return_stmt|assignment;stmt|input;stmt|output;stmt|return_stmt;stmt
+loop->go from type assignment to identifier: stmt;|go from type assignment to const_int: stmt;|go from type identifier to identifier: stmt;|go from type identifier to const_int: stmt;
+function->function identifier (params): function_code
+function_code->declaration function_code|list_declaration function_code|input function_code|output function_code|assignment function_code|if_stmt function_code|loop function_code|return_stmt function_code|ε
+params->declaration, params|list_declaration, params|ε
+program->function program|function
