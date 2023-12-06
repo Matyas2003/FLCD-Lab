@@ -5,13 +5,20 @@ class Node:
         self.parent = None
         self.index = 0
 
+class Config:
+    def __init__(self, state, length, working_stack, input_stack):
+        self.state = state
+        self.length = length
+        self.working_stack = working_stack
+        self.input_stack = input_stack
+        self.symbol_count = {}
 
-def print_tree(root):
-    # preorder print
+def print_tree(root, depth=0):
+    # Recursive function to print the tree with proper indentation
     if root:
-        print(root.value)
+        print("  " * depth + str(root.value))
         for c in root.children:
-            print_tree(c)
+            print_tree(c, depth + 1)
 
 
 def create_parent_sibling_table(root):
@@ -66,7 +73,7 @@ class ParserOutput:
                     current_node = current_node.parent
                 current_node.children.append(next_node)
                 i += 1
-
+        print_tree(self.root)
 
 class Grammar:
     def __init__(self):
@@ -159,101 +166,102 @@ class Grammar:
             print("False")
 
 
-def beta_head(beta):
-    return beta[0]
+def remaining_input_head(remaining_input):
+    return remaining_input[0]
 
 
-def alpha_head(alpha):
-    if alpha[len(alpha) - 1].isnumeric():
-        return alpha[len(alpha) - 2]
+def parsed_input_head(parsed_input):
+    if parsed_input[len(parsed_input) - 1].isnumeric():
+        return parsed_input[len(parsed_input) - 2]
     else:
-        return alpha[len(alpha) - 1]
+        return parsed_input[len(parsed_input) - 1]
 
 
 def expand(config):
     global grammar
-    alpha = config[2] + config[3][0] + "1"
-    beta_str = ""
-    for i in range(1, len(config[3])):
-        beta_str += config[3][i]
-    beta = grammar.productions[config[3][0]][0] + beta_str
-    config[2] = alpha
-    config[3] = beta
+    symbol_count = config.symbol_count.get(config.input_stack[0], 0) + 1
+    parsed_input = config.working_stack + config.input_stack[0] + str(symbol_count)
+    remaining_input_str = "".join(config.input_stack[1:])
+    remaining_input = grammar.productions[config.input_stack[0]][0] + remaining_input_str
+    config.working_stack = parsed_input
+    config.input_stack = remaining_input
+    config.symbol_count[config.input_stack[0]] = symbol_count
     return config
 
 
 def advance(config):
     global grammar
-    config[1] += 1
-    alpha = config[2] + config[3][0]
-    beta = config[3][1:]
-    config[2] = alpha
-    config[3] = beta
+    config.length += 1
+    parsed_input = config.working_stack + config.input_stack[0]
+    remaining_input = config.input_stack[1:]
+    config.working_stack = parsed_input
+    config.input_stack = remaining_input
     return config
 
 
 def momentary_insuccess(config):
-    config[0] = "back state"
+    config.state = "back state"
     return config
 
 
 def back(config):
-    # take alpha and reverse it
-    alpha_aux = config[2][::-1]
-    head = alpha_head(config[2])
+    # take parsed_input and reverse it
+    parsed_input_aux = config.working_stack[::-1]
+    head = parsed_input_head(config.working_stack)
     # delete the head (including the index)
-    split_alpha = alpha_aux.split(head, 1)
+    split_parsed_input = parsed_input_aux.split(head, 1)
     # reverse the string -> initial string - the head
-    alpha_aux = split_alpha[1][::-1]
+    parsed_input_aux = split_parsed_input[1][::-1]
 
-    config[1] = config[1] - 1
-    config[2] = alpha_aux
-    config[3] = head + config[3]
+    config.length = config.length - 1
+    config.working_stack = parsed_input_aux
+    config.input_stack = head + config.input_stack
 
     return config
 
 
 def another_try(config):
-    head = alpha_head(config[2])
+    head = parsed_input_head(config.working_stack)
 
-    if config[1] == 1 and head == grammar.start_symbol:
-        config[0] = 'error state'
+    if config.length == 1 and head == grammar.start_symbol:
+        config.state = 'error state'
     else:
-        current_nonterminal_index = int(config[2][len(config[2]) - 1])
+        current_nonterminal_index = int(config.working_stack[len(config.working_stack) - 1])
         productions = grammar.productions[head]
         if len(productions) > current_nonterminal_index:  # then there is a production for the head non-terminal
             current_production = productions[current_nonterminal_index]
             old_production = productions[current_nonterminal_index - 1]
-            new_alpha = config[2][:-2] + head + str(current_nonterminal_index + 1)
-            new_beta = current_production + config[3][len(old_production):]
+            new_parsed_input = config.working_stack[:-2] + head + str(current_nonterminal_index + 1)
+            new_remaining_input = current_production + config.input_stack[len(old_production):]
 
-            config[0] = 'normal state'
-            config[2] = new_alpha
-            config[3] = new_beta
+            config.state = 'normal state'
+            config.working_stack = new_parsed_input
+            config.input_stack = new_remaining_input
 
         else:  # there isn't a production for the head non-terminal
             old_production = productions[current_nonterminal_index - 1]
 
-            config[0] = 'back state'
-            config[2] = config[2][:-2]
-            config[3] = head + config[3][len(old_production):]
+            config.state = 'back state'
+            config.working_stack = config.working_stack[:-2]
+            config.input_stack = head + config.input_stack[len(old_production):]
 
     return config
 
 
 def success(config):
-    config[0] = "final state"
+    config.state = "final state"
     return config
 
 
-def is_empty(beta):
-    if len(beta) == 0:
+def is_empty(remaining_input):
+    if len(remaining_input) == 0:
         return True
     else:
         return False
 
 
 def print_result_table(table):
+
     for i in range(len(table)):
         print(str(i+1), ":", table[i])
 
@@ -279,37 +287,37 @@ def rd_parser():
     b = "back state"
     f = "final state"
     e = "error state"
-    config = [q, 1, "", "S"]
-    while config[0] != f and config[0] != e:
-        if config[0] == q:
-            if config[1] == len(word) + 1 and is_empty(config[3]):
+    config = Config(q, 1, "", "S")
+    while config.state != f and config.state != e:
+        if config.state == q:
+            if config.length == len(word) + 1 and is_empty(config.input_stack):
                 config = success(config)
             else:
-                if beta_head(config[3]) in grammar.nonterminals:
+                if remaining_input_head(config.input_stack) in grammar.nonterminals:
                     config = expand(config)
                 else:
-                    if config[1] <= len(word) and beta_head(config[3]) == word[config[1] - 1]:
+                    if config.length <= len(word) and remaining_input_head(config.input_stack) == word[config.length - 1]:
                         config = advance(config)
                     else:
                         config = momentary_insuccess(config)
         else:
-            if config[0] == b:
-                if alpha_head(config[2]) in grammar.terminals:
+            if config.state == b:
+                if parsed_input_head(config.working_stack) in grammar.terminals:
                     config = back(config)
                 else:
                     config = another_try(config)
-    if config[0] == e:
+    if config.state == e:
         print("Error")
     else:
         print("Sequence accepted")
-        build_string_of_production(config[2])
+        build_string_of_production(config.working_stack)
 
 
 def read_sequence():
     f = open("seq.txt", 'r')
     return f.readline()
 
-
+grammar = Grammar()
 def menu():
     print("_____MENU_____")
     print("0. Exit")
@@ -325,7 +333,6 @@ def menu():
 
 
 if __name__ == '__main__':
-    grammar = Grammar()
     while True:
         menu()
         cmd = int(input("command >>> "))
