@@ -1,3 +1,5 @@
+// This looks good to me :D
+
 class Node:
     def __init__(self, val):
         self.value = val
