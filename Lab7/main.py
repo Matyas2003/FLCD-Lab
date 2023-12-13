@@ -1,4 +1,5 @@
-// This looks good to me :D
+# This looks good to me :D
+# Still looks good to me :D
 
 class Node:
     def __init__(self, val):
@@ -333,6 +334,8 @@ def menu():
     print("8. Recursive descent parser")
     print("9. Recursive descent parser - prepared example")
 
+
+# Maybe you can use a dictionary for each function and call directly dict[cmd]() or something like this
 
 if __name__ == '__main__':
     while True:
